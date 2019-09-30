@@ -1,0 +1,267 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<style>
+    #divBusca {
+        background-color: #E8E8E8;
+        border-radius: 10px;
+        width: 80%;
+        height: 32px;
+        left: 50%;
+        top: 50%;
+    }
+
+    #txtBusca {
+        float: left;
+        background-color: transparent;
+        padding-left: 5%;
+        font-size: 18px;
+        border: none;
+        height: 32px;
+        width: 95%;
+    }
+
+    #janela-pesquisa {
+        border-radius: 10px;
+        width: 100%;
+        height: 150px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center
+    }
+
+    #pesquisa-feita {
+        text-align: center;
+        font-size: 18px;
+        font-family: Arial;
+        color: gray
+    }
+
+    .Div-Btn-Novo-Anuncio {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        width: 95%;
+    }
+
+    .Btn-Novo-Anuncio {
+        background: gray;
+        border-radius: 10px;
+        width: 120px;
+        height: 30px;
+    }
+
+    #Btn-txt-Novo-Anuncio {
+        font-family: Arial;
+        color: white;
+        font-size: 15px;
+        text-align: center;
+    }
+
+    a:link {
+        text-decoration: none;
+        color: white;
+        padding: 5px;
+    }
+
+    a:active {
+        border: 0px transparent;
+    }
+
+    a:visited {
+        color: white;
+    }
+
+    .Btn-Edit-Delet {
+        background: black;
+        border-radius: 10px;
+        width: 60px;
+        height: 30px;
+    }
+
+    #Tabela-Busca {
+        border: 1px solid gray;
+        border-spacing: 0px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #TabelaResultado {
+        border: 1px solid gray;
+        border-spacing: 0px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #Tabela-Busca th {
+        border: 1px solid gray;
+        width: 180px;
+        height: 50px;
+        text-align: center;
+        background-color: gray;
+    }
+
+    .Cabecalho {
+        font-family: Arial;
+        font-size: 18px;
+        color: white;
+    }
+
+    .Informacoes td {
+        border: 1px solid gray;
+        font-family: Arial;
+        font-size: 18px;
+        color: gray;
+        text-align: center;
+    }
+</style>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>
+        Projeto WebMotors Erick Ajudarte Bezerra
+    </title>
+</head>
+<body>
+    <div id="janela-pesquisa">
+        <div id="janela-pesquisa">
+            <div id="divBusca">
+                <input type="text" id="txtBusca" placeholder="Digite modelo ou marca de sua pesquisa." />
+            </div>
+        </div>
+    </div>
+    <div class="Div-Btn-Novo-Anuncio">
+        <button class="Btn-Novo-Anuncio" id="Btn-txt-Novo-Anuncio">@Html.ActionLink("Novo Anuncio", "index_NovoAnuncio", "Pesquisa")</button>
+    </div>
+    <div>
+        <div>
+            <table id="TabelaResultado">
+                <thead>
+                    <tr id="Tabela-Busca" class="Cabecalho">
+                        <th>Código</th>
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Versão</th>
+                        <th>Ano</th>
+                        <th>Quilometragem</th>
+                        <th>Observações</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="tbody" class="Informacoes"></tbody>
+            </table>
+    </div>
+
+</body>
+</html>
+
+<script>
+
+
+
+    //Construindo a tabela com informações do Banco de Dados
+    //var dados = [
+    //    ["Chevrolet", "Corsa", "Sedan", "1999", "204.000", "20 anos de uso."],
+    //    ["Forde", "Fiesta", "Ret", "2006", "56.000", "12 anos de uso."],
+    //    ["Honda", "city", "Sedan", "2015", "20.000", "2 anos de uso."],
+    //    ["Wolksvagem", "Gol", "Chines", "1991", "304.000", "30 anos de uso."]
+    //];
+
+    $(document).ready(function () {
+
+
+        $.ajax({
+            url: "/Pesquisa/Pag_Pesquisa",
+            method: "POST",
+            success: function (data) {
+                data = JSON.parse(data);
+
+                for (var i = 0; i < data.length; i++)
+                {
+
+                    var tr_txt = "<tr>" +
+                        "<td name =\"id\" id = \"txtID\" >" + data[i].ID + "</td>" +
+                        "<td>" + data[i].Marca + "</td>" +
+                        "<td>" + data[i].Modelo + "</td>" +
+                        "<td>" + data[i].Versao + "</td>" +
+                        "<td>" + data[i].Ano + "</td>" +
+                        "<td>" + data[i].klm + "</td>" +
+                        "<td>" + data[i].Obs + "</td>" +
+                        "<td><button class=\"Btn-Novo-Anuncio\" id=\"Btn-txt-Novo-Anuncio\"><a href=\"/Pesquisa/Busca_Editar\?id=" + data[i].ID + "   \"/>Editar</button></td>" +
+                        "<td><button class=\"Btn-Novo-Anuncio\" id=\"Btn-txt-Novo-Anuncio\"><a href=\"/Pesquisa/Deletar_Dados\?id=" + data[i].ID + "   \"/>Apagar</button></td>" +
+                        "</tr>";
+
+                document.getElementById("tbody").innerHTML += tr_txt;
+                // var tr_txt = tbody.childNodes;
+
+                }
+            }
+
+        });
+    //Fim da Construção
+    });
+
+    var tbody = document.getElementById("tbody")
+    document.getElementById("txtBusca").addEventListener("keyup", function () {
+        var busca = document.getElementById("txtBusca").value.toLowerCase();
+
+        for (var i = 0; i < tbody.childNodes.length; i++) {
+            var PesquisaEncontrada = false;
+            var tr = tbody.childNodes[i];
+
+            console.log(tr);
+            for (var j = 0; j < tr.childNodes.length - 2; j++) {
+                var value = tr.childNodes[j].innerHTML.toLowerCase();
+
+                if (value == busca) {
+                    PesquisaEncontrada = true;
+                }
+            }
+
+            if (PesquisaEncontrada) {
+                tr.style.display = "table-row";
+            }
+            else {
+                tr.style.display = "none";
+            }
+            if (busca == "") {
+                tr.style.display = "table-row";
+            }
+        }
+    });
+
+</script>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $(".Btn-Deletar").click(function () {
+            var ID = $("#txtID").val();
+            $.ajax({
+                type: "POST",
+                url: "/Pesquisa/Deletar_Dados",
+                data: { ID: ID },
+                async: false,
+                success: function (responde) {
+                    $("txtID").val();
+                    alert("Registro salvo com sucesso");
+                },
+                error: function () {
+                    alert("Por algum motivo desconhecido não foi possível salvar.");
+                }
+            });
+        });
+    });
+
+
+</script>
+

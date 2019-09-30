@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "index_NovoAnuncio";
+    Layout = null;
+}
+<!DOCTYPE html>
+<style>
+    #div-Formulario {
+        background-color: #E8E8E8;
+        border-radius: 10px;
+        width: 30%;
+        height: 620px;
+        position:absolute;
+        left: 36%;
+        top: 10%;
+    }
+
+    #Formulario {
+     position:relative;
+     left:10%;
+    }
+    #div-tituloFormulario {
+        width: 100%;
+        height: 10%;
+    }
+    #txtTituloFormulario {
+        font-family: Arial;
+        font-size: 30px;
+        text-align: center;
+        position: relative;
+        top: 50%;
+        
+    }
+    .Div-Btn-Salvar {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        width: 95%;
+    }
+
+    .Btn-Salvar_Teste {
+        background: gray;
+        border-radius: 10px;
+        width: 120px;
+        height: 30px;
+        position:relative;
+        left:35%
+    }
+
+    #Btn-txt-Salvar {
+        font-family: Arial;
+        color: white;
+        font-size: 15px;
+        text-align: center;
+    }
+    a:link {
+        text-decoration: none;
+        color: white;
+        padding: 5px;
+    }
+
+    a:active {
+        border: 0px transparent;
+    }
+
+    a:visited {
+        color: white;
+    }
+</style>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>
+        Projeto WebMotors Erick Ajudarte Bezerra
+    </title>
+</head>
+<body>
+    <div id="div-Formulario">
+        <div id="div-tituloFormulario">
+            <h1 id="txtTituloFormulario">Novo Anúncio</h1>
+        </div>
+        <form name="formNovoAnuncio" action="" method="get" id="Formulario">
+            <p>
+                Marca:<br /><input id="txtMarca" type="text" name="Marca" /><br />
+            </p>
+            <p>
+                Modelo:<br /><input id="txtModelo" type="text" name="Modelo" /><br />
+            </p>
+            <p>
+                Versão:<br /><input id="txtVersao" type="text" name="Vesao" /><br />
+            </p>
+            <p>
+                Ano:<br /><input id="txtAno" type="text" name="Ano" /><br />
+            </p>
+            <p>
+                Quilometragem:<br /><input id="txtKlm" type="text" name="Quilometragem" /><br />
+            </p>
+            <p>
+                Observação:<br /><textarea id="txtObs" name="Observacoes" cols="45" rows="10"></textarea>
+            </p>
+        </form>
+        <div class="Div-Salvar">
+            <button class="Btn-Salvar_Teste" id="Btn-Salvar">@Html.ActionLink("Salvar", "index", "Pesquisa")</button>
+            <button class="Btn-Salvar_Teste" id="Btn-txt-Salvar">@Html.ActionLink("Voltar", "index", "Pesquisa")</button>
+        </div>
+    </div>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $( "#Btn-Salvar").click(function () {
+                var Marca = $("#txtMarca").val();
+                var Modelo = $("#txtModelo").val();
+                var Versao = $("#txtVersao").val();
+                var Ano = $("#txtAno").val();
+                var klm = $("#txtKlm").val();
+                var Obs = $("#txtObs").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/Pesquisa/Inserir_Dados",
+                    data: {Marca: Marca , Modelo: Modelo , Versao: Versao, Ano: Ano, klm: klm , Obs: Obs},
+                    async: false,
+                    success: function (responde) {
+                        $("txtMarca").val();
+                        $("txtModelo").val();
+                        $("txtVersao").val();
+                        $("txtAno").val();
+                        $("txtKlm").val();
+                        $("txtObs").val();
+                        alert("Registro salvo com sucesso");
+                    },
+                    error: function () {
+                        alert("Por algum motivo desconhecido não foi possível salvar.");
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
